@@ -1,0 +1,19 @@
+{
+  "name": "cookie-processor",
+  "version": "1.0.0",
+  "description": "processing cookie logs and finding the most active cookie for a specific day",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js -f cookie_log.csv -d 2018-12-09"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nsathya1990/cookie-processor.git"
+  },
+  "author": "Sathyapriyan Chinnathangam Nadar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nsathya1990/cookie-processor/issues"
+  },
+  "homepage": "https://github.com/nsathya1990/cookie-processor#readme"
+}
