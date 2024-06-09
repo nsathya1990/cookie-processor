@@ -1,21 +1,25 @@
 const fs = require('fs');
 const readline = require('readline');
-const path = require('path');
-const winston = require('winston'); // a logging library
+const winston = require('winston');
 
 // Create a logger instance
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} ${level}: ${message}`;
+    })
+  ),
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'output.log' }),
   ],
 });
 
 // Validate & parse command line arguments
 function parseArgs(args) {
-  if (args?.length < 4 || !args.include('-f') || !args.include('-d')) {
+  if (args?.length !== 4 || args[0] !== '-f' || args[2] !== '-d') {
     throw new Error(
       'Invalid Arguments. Usage: node index.js -f filename -d date'
     );
@@ -31,9 +35,7 @@ function processLogFile(filename, date) {
   const cookieCounter = new Map();
 
   const rl = readline.createInterface({
-    input: fs.createReadStream(path.join(__dirname, filename)),
-    output: process.stdout,
-    terminal: false,
+    input: fs.createReadStream(filename),
   });
 
   rl.on('line', (line) => {
@@ -47,6 +49,7 @@ function processLogFile(filename, date) {
     const maxCount = Math.max(...Array.from(cookieCounter.values()));
     for (const [cookie, count] of cookieCounter.entries()) {
       if (count === maxCount) {
+        console.log(cookie);
         logger.info('Most Active Cookie', cookie);
       }
     }
@@ -57,15 +60,16 @@ function processLogFile(filename, date) {
   });
 }
 
-//Main function
+// Main function
 function main() {
   try {
     const { filename, date } = parseArgs(process.argv.slice(2));
     processLogFile(filename, date);
   } catch (err) {
     logger.error('Error: ', err);
-    process.exit(1);
   }
 }
 
 main();
+
+module.exports = { parseArgs, processLogFile };
