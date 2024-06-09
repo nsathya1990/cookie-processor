@@ -38,4 +38,4 @@ node index.js -f cookie_log.csv -d 2018-12-09
 
 ## Logging
 
-The application uses the `winston` library for logging. Logs are written to `error.log` for errors and `combined.log` for all logs.
+The application uses the `winston` library for logging. Logs are written to `output.log`. It includes both successful & error case logs.
