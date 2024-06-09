@@ -1,6 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
-const winston = require('winston');
+const winston = require('winston'); // a logging library
 
 // Create a logger instance
 const logger = winston.createLogger({
@@ -46,12 +46,24 @@ function processLogFile(filename, date) {
   });
 
   rl.on('close', () => {
-    const maxCount = Math.max(...Array.from(cookieCounter.values()));
+    let maxCount = 0;
+    const mostActiveCookies = [];
+
     for (const [cookie, count] of cookieCounter.entries()) {
-      if (count === maxCount) {
-        console.log(cookie);
-        logger.info('Most Active Cookie', cookie);
+      if (count > maxCount) {
+        maxCount = count;
+        mostActiveCookies.length = 0; // Clear the array
+        mostActiveCookies.push(cookie);
+      } else if (count === maxCount) {
+        mostActiveCookies.push(cookie);
       }
+    }
+
+    if (mostActiveCookies.length > 0) {
+      mostActiveCookies.forEach((cookie) => console.log(cookie));
+      logger.info(`Most Active Cookie - ${mostActiveCookies}`);
+    } else {
+      logger.info('No cookies found for the given date.');
     }
   });
 
