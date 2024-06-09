@@ -4,8 +4,8 @@ This project provides a command line tool to process cookie logs and determine t
 
 ## Requirements
 
-- Node.js (version 12.x or higher)
-- npm (version 6.x or higher)
+- Node.js
+- npm
 
 ## Installation
 
@@ -15,7 +15,8 @@ This project provides a command line tool to process cookie logs and determine t
     cd cookie-processor
     ```
 
-2. Install the dependencies:
+2. Navigate to the project directory in your terminal
+3. Install the dependencies by running the following command:
     ```sh
     npm install
     ```
@@ -25,4 +26,16 @@ This project provides a command line tool to process cookie logs and determine t
 To find the most active cookie for a specific date, use the following command:
 
 ```sh
+node index.js -f filename -d date
+```
+
+Replace filename with the name of your log file and the date you want to check in the format yyyy-mm-dd.
+Example:
+
+```sh
 node index.js -f cookie_log.csv -d 2018-12-09
+```
+
+## Logging
+
+The application uses the `winston` library for logging. Logs are written to `error.log` for errors and `combined.log` for all logs.
